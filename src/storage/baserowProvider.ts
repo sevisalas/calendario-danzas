@@ -84,6 +84,24 @@ function userFileUploadUrl(): string {
   return `${config.apiUrl.replace(/\/$/, '')}/api/user-files/upload-file/`;
 }
 
+function normalizeBaserowFileUrl(url: string): string {
+  const trimmedUrl = url.trim();
+  if (!trimmedUrl) {
+    return '';
+  }
+
+  if (/^(https?:|data:|blob:)/i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  if (trimmedUrl.startsWith('//')) {
+    return `https:${trimmedUrl}`;
+  }
+
+  const baseUrl = config.apiUrl.replace(/\/$/, '');
+  return trimmedUrl.startsWith('/') ? `${baseUrl}${trimmedUrl}` : `${baseUrl}/${trimmedUrl}`;
+}
+
 async function baserowFetch<T>(url: string, init?: RequestInit): Promise<T> {
   requireConfig();
 
@@ -151,7 +169,7 @@ function eventFromRow(row: BaserowEventRow): DanceEvent {
     location: row.location ?? '',
     clothingRequired: row.clothingRequired ?? false,
     notes: row.notes ?? '',
-    imageUrl: String(imageUrl || '').trim(),
+    imageUrl: normalizeBaserowFileUrl(String(imageUrl || '')),
     active: row.active ?? true,
     finished: row.finished ?? false,
     createdAt: row.createdAt ?? '',
@@ -297,7 +315,7 @@ export async function uploadFile(file: File): Promise<string> {
     throw new Error('No se ha podido obtener la URL del archivo subido');
   }
 
-  return uploadedFile.url;
+  return normalizeBaserowFileUrl(uploadedFile.url);
 }
 
 export async function deleteEvent(id: string): Promise<AppData> {

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { Attendance, DanceEvent, Member } from '../types';
 import { formatDateLabel, formatStatus, getAttendanceSummary } from '../utils';
 
@@ -18,9 +19,15 @@ export function EventCard({
   onUpdateAttendance,
   onViewInscritos,
 }: EventCardProps) {
+  const [hasPosterError, setHasPosterError] = useState(false);
   const memberNames = attendances
     .map((attendance) => members.find((member) => member.id === attendance.memberId)?.name)
     .filter(Boolean) as string[];
+  const shouldShowPoster = Boolean(event.imageUrl) && !hasPosterError;
+
+  useEffect(() => {
+    setHasPosterError(false);
+  }, [event.imageUrl]);
 
   return (
     <article className="event-card">
@@ -66,14 +73,12 @@ export function EventCard({
           )}
         </div>
 
-        {event.imageUrl && (
+        {shouldShowPoster && (
           <div className="event-poster">
             <img
               src={event.imageUrl}
               alt={`Cartel de ${event.title}`}
-              onError={(imageEvent) => {
-                imageEvent.currentTarget.style.display = 'none';
-              }}
+              onError={() => setHasPosterError(true)}
             />
           </div>
         )}
