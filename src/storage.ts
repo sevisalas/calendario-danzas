@@ -38,8 +38,8 @@ function getRelativeDate(days: number): string {
 
 function createDefaultMembers(): Member[] {
   return [
-    { id: createId(), name: 'Leonor', active: true, isAdmin: true, createdAt: nowIso() },
-    { id: createId(), name: 'Sevi', active: true, isAdmin: false, createdAt: nowIso() },
+    { id: createId(), name: 'Leonor', active: true, isAdmin: true, password: '1234', createdAt: nowIso() },
+    { id: createId(), name: 'Sevi', active: true, isAdmin: false, password: '1234', createdAt: nowIso() },
   ];
 }
 
@@ -87,6 +87,7 @@ function normalizeData(data: Partial<AppData>): AppData {
       ...member,
       active: member.active ?? true,
       isAdmin: member.isAdmin ?? false,
+      password: member.password ?? '',
       createdAt: member.createdAt || nowIso(),
     }));
 

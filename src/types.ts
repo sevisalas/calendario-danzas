@@ -6,6 +6,7 @@ export interface Member {
   name: string;
   active: boolean;
   isAdmin: boolean;
+  password: string;
   createdAt: string;
 }
 

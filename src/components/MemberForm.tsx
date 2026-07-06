@@ -12,6 +12,7 @@ const emptyMember = (): Member => ({
   name: '',
   active: true,
   isAdmin: false,
+  password: '',
   createdAt: new Date().toISOString(),
 });
 
@@ -32,6 +33,7 @@ export function MemberForm({ initialMember, onSubmit, onCancel }: MemberFormProp
       ...member,
       id: initialMember?.id ?? crypto.randomUUID(),
       name: member.name.trim(),
+      password: member.password,
       createdAt: initialMember?.createdAt ?? new Date().toISOString(),
     });
   };
@@ -57,6 +59,15 @@ export function MemberForm({ initialMember, onSubmit, onCancel }: MemberFormProp
           onChange={(e) => setMember({ ...member, isAdmin: e.target.checked })}
         />
         Administrador
+      </label>
+      <label>
+        Contraseña
+        <input
+          type="password"
+          value={member.password}
+          onChange={(e) => setMember({ ...member, password: e.target.value })}
+          required
+        />
       </label>
       <div className="modal-actions">
         {onCancel && <button type="button" className="secondary-btn" onClick={onCancel}>Cancelar</button>}

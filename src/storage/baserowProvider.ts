@@ -23,6 +23,7 @@ interface BaserowMemberRow {
   name?: string;
   active?: boolean;
   isAdmin?: boolean;
+  password?: string;
   createdAt?: string;
 }
 
@@ -119,6 +120,7 @@ function memberFromRow(row: BaserowMemberRow): Member {
     name: row.name ?? '',
     active: row.active ?? true,
     isAdmin: row.isAdmin ?? false,
+    password: row.password ?? '',
     createdAt: row.createdAt ?? '',
   };
 }
@@ -157,6 +159,7 @@ function memberToPayload(member: Member) {
     name: member.name,
     active: member.active,
     isAdmin: member.isAdmin,
+    password: member.password,
     createdAt: member.createdAt,
   };
 }

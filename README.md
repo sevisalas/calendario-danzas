@@ -30,7 +30,6 @@ Configura [.env.local](.env.local) con:
 ```env
 VITE_DATA_SOURCE=baserow
 VITE_SHOW_DIAGNOSTICS=false
-VITE_ADMIN_PASSWORD=1234
 
 VITE_BASEROW_API_URL=https://api.baserow.io
 VITE_BASEROW_TOKEN=AQUI_EL_TOKEN_REAL
@@ -65,6 +64,7 @@ Miembros `1063241`:
 - `name`
 - `active`
 - `isAdmin`
+- `password`
 - `createdAt`
 
 Asistencias `1063242`:
@@ -80,13 +80,14 @@ Aunque la tabla se llame “Asistentes”, el código interno usa `attendance`.
 
 ## Acceso
 
-Al abrirla, el usuario elige su nombre entre los miembros activos.
+Al abrirla, el usuario elige su nombre entre los miembros activos e introduce su contraseña.
 
-- Si el miembro tiene `isAdmin=true`, debe introducir `VITE_ADMIN_PASSWORD` para activar administración.
+- La contraseña se valida contra el campo `password` del miembro en Baserow.
+- Si el miembro tiene `isAdmin=true`, verá la opción de administración.
 - Si el miembro tiene `isAdmin=false`, no verá ninguna opción de administración.
 
 El miembro seleccionado se guarda en `localStorage` con la clave `dance_calendar_member_id`.
-La validación de administración se guarda con `dance_calendar_admin_verified`.
+La contraseña no se guarda en `localStorage`.
 
 ## Modo local
 

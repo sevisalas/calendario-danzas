@@ -7,8 +7,6 @@ import { AttendanceModal } from './components/AttendanceModal';
 import { AdminPanel } from './components/AdminPanel';
 
 const MEMBER_STORAGE_KEY = 'dance_calendar_member_id';
-const ADMIN_VERIFIED_STORAGE_KEY = 'dance_calendar_admin_verified';
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || '1234';
 const showDiagnostics = import.meta.env.VITE_SHOW_DIAGNOSTICS === 'true';
 
 function App() {
@@ -19,9 +17,8 @@ function App() {
   const [modalMode, setModalMode] = useState<'edit' | 'view' | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   const [currentMemberId, setCurrentMemberId] = useState<string | null>(() => window.localStorage.getItem(MEMBER_STORAGE_KEY));
-  const [adminPassword, setAdminPassword] = useState('');
-  const [adminVerified, setAdminVerified] = useState(() => window.localStorage.getItem(ADMIN_VERIFIED_STORAGE_KEY) === 'true');
   const [message, setMessage] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [hasLoadedData, setHasLoadedData] = useState(false);
@@ -40,9 +37,8 @@ function App() {
 
     return members.find((member) => member.id === currentMemberId && member.active) ?? null;
   }, [currentMemberId, members]);
-  const needsAdminPassword = currentMember?.isAdmin === true && !adminVerified;
-  const isAuthenticated = currentMember !== null && !needsAdminPassword;
-  const isAdmin = currentMember?.isAdmin === true && adminVerified;
+  const isAuthenticated = currentMember !== null;
+  const isAdmin = currentMember?.isAdmin === true;
 
   useEffect(() => {
     void refreshData(false);
@@ -56,9 +52,7 @@ function App() {
     const savedMember = members.find((member) => member.id === currentMemberId);
     if (!savedMember || !savedMember.active) {
       window.localStorage.removeItem(MEMBER_STORAGE_KEY);
-      window.localStorage.removeItem(ADMIN_VERIFIED_STORAGE_KEY);
       setCurrentMemberId(null);
-      setAdminVerified(false);
       setIsAdminOpen(false);
       closeAttendanceModal();
     }
@@ -188,39 +182,28 @@ function App() {
     }
   };
 
-  const handleMemberAccess = () => {
+  const handleLogin = () => {
     const member = activeMembers.find((item) => item.id === selectedMemberId);
     if (!member) {
       return;
     }
 
-    window.localStorage.setItem(MEMBER_STORAGE_KEY, member.id);
-    window.localStorage.removeItem(ADMIN_VERIFIED_STORAGE_KEY);
-    setCurrentMemberId(member.id);
-    setAdminVerified(false);
-    setAdminPassword('');
-    setSelectedMemberId('');
-    setMessage('');
-  };
-
-  const handleAdminPassword = () => {
-    if (adminPassword !== ADMIN_PASSWORD) {
+    if (!loginPassword || loginPassword !== member.password) {
       setMessage('Contraseña incorrecta');
       return;
     }
 
-    window.localStorage.setItem(ADMIN_VERIFIED_STORAGE_KEY, 'true');
-    setAdminVerified(true);
-    setAdminPassword('');
+    window.localStorage.setItem(MEMBER_STORAGE_KEY, member.id);
+    setCurrentMemberId(member.id);
+    setLoginPassword('');
+    setSelectedMemberId('');
     setMessage('');
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem(MEMBER_STORAGE_KEY);
-    window.localStorage.removeItem(ADMIN_VERIFIED_STORAGE_KEY);
     setCurrentMemberId(null);
-    setAdminVerified(false);
-    setAdminPassword('');
+    setLoginPassword('');
     setSelectedMemberId('');
     setIsAdminOpen(false);
     closeAttendanceModal();
@@ -325,44 +308,35 @@ function App() {
 
       {message && <div className="message-banner">{message}</div>}
 
-      {!currentMember && (
+      {!isAuthenticated && (
         <main className="access-card">
-          <h2>¿Quién eres?</h2>
+          <h2>Acceso al calendario</h2>
           <label>
-            Selecciona tu nombre
+            Miembro
             <select value={selectedMemberId} onChange={(event) => setSelectedMemberId(event.target.value)}>
-              <option value="">{activeMembers.length > 0 ? 'Selecciona tu nombre' : 'No hay miembros activos'}</option>
+              <option value="">{activeMembers.length > 0 ? 'Selecciona un miembro' : 'No hay miembros activos'}</option>
               {activeMembers.map((member) => (
                 <option key={member.id} value={member.id}>{member.name}</option>
               ))}
             </select>
           </label>
-          <button className="primary-btn" onClick={handleMemberAccess} disabled={!selectedMemberId}>
+          <label>
+            Contraseña
+            <input
+              type="password"
+              value={loginPassword}
+              onChange={(event) => setLoginPassword(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && selectedMemberId && loginPassword) {
+                  handleLogin();
+                }
+              }}
+              autoComplete="current-password"
+              required
+            />
+          </label>
+          <button className="primary-btn" onClick={handleLogin} disabled={!selectedMemberId || !loginPassword}>
             Entrar
-          </button>
-        </main>
-      )}
-
-      {currentMember && needsAdminPassword && (
-        <main className="access-card">
-          <h2>Contraseña de administración</h2>
-          <p>{currentMember.name} puede administrar. Introduce la contraseña para continuar.</p>
-          <input
-            type="password"
-            value={adminPassword}
-            onChange={(event) => setAdminPassword(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleAdminPassword();
-              }
-            }}
-            placeholder="Contraseña de administración"
-          />
-          <button className="primary-btn" onClick={handleAdminPassword} disabled={!adminPassword}>
-            Entrar
-          </button>
-          <button className="secondary-btn" onClick={handleLogout}>
-            Cambiar usuario
           </button>
         </main>
       )}
