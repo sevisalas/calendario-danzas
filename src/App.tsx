@@ -310,7 +310,7 @@ function App() {
           <div className="session-actions">
             {isAdmin && (
               <button className="admin-link-btn" onClick={() => setIsAdminOpen((value) => !value)}>
-                Administración
+                {isAdminOpen ? 'Calendario' : 'Administración'}
               </button>
             )}
             {isAuthenticated && (
