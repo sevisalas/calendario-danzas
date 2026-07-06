@@ -25,6 +25,8 @@ interface BaserowMemberRow {
   isAdmin?: boolean;
   password?: string | null;
   Password?: string | null;
+  clave?: string | null;
+  Clave?: string | null;
   contraseña?: string | null;
   Contraseña?: string | null;
   createdAt?: string;
@@ -118,7 +120,7 @@ function eventFromRow(row: BaserowEventRow): DanceEvent {
 }
 
 function getMemberPassword(row: BaserowMemberRow): string {
-  return row.password ?? row.Password ?? row.contraseña ?? row.Contraseña ?? '';
+  return row.Clave ?? row.clave ?? row.password ?? row.Password ?? row.contraseña ?? row.Contraseña ?? '';
 }
 
 function memberFromRow(row: BaserowMemberRow): Member {
@@ -179,7 +181,7 @@ function memberToPayload(member: Member) {
     name: member.name,
     active: member.active,
     isAdmin: member.isAdmin,
-    password: member.password,
+    Clave: member.password,
     createdAt: member.createdAt,
   };
 }

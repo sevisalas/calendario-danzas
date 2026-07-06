@@ -64,7 +64,7 @@ Miembros `1063241`:
 - `name`
 - `active`
 - `isAdmin`
-- `password`
+- `Clave`
 - `createdAt`
 
 Asistencias `1063242`:
@@ -82,7 +82,7 @@ Aunque la tabla se llame “Asistentes”, el código interno usa `attendance`.
 
 Al abrirla, el usuario elige su nombre entre los miembros activos e introduce su contraseña.
 
-- La contraseña se valida contra el campo `password` del miembro en Baserow.
+- La contraseña se valida contra el campo `Clave` del miembro en Baserow.
 - Si el miembro tiene `isAdmin=true`, verá la opción de administración.
 - Si el miembro tiene `isAdmin=false`, no verá ninguna opción de administración.
 
