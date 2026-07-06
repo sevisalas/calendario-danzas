@@ -68,7 +68,7 @@ button:disabled {
   border-radius: 22px;
   background:
     linear-gradient(rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.18)),
-    url("/images/banner_danzas_valencianas_logo_visible.png"),
+    url("/images/banner-danzas.jpg"),
     linear-gradient(135deg, #E8F0F4, #F8FAFC 58%, #FFF3E4);
   background-size: cover;
   background-position: center;
