@@ -63,7 +63,7 @@ Miembros `1063241`:
 
 - `name`
 - `active`
-- `isAdmin`
+- `Admin`
 - `Clave`
 - `createdAt`
 
@@ -84,8 +84,8 @@ Al abrirla, el usuario escribe su nombre y su clave.
 
 - La contraseña se valida contra el campo `Clave` del miembro en Baserow.
 - El nombre se compara sin distinguir mayúsculas/minúsculas y sin espacios al principio o al final.
-- Si el miembro tiene `isAdmin=true`, verá la opción de administración.
-- Si el miembro tiene `isAdmin=false`, no verá ninguna opción de administración.
+- Si el miembro tiene `Admin=true`, verá la opción de administración.
+- Si el miembro tiene `Admin=false`, no verá ninguna opción de administración.
 
 El miembro seleccionado se guarda en `localStorage` con la clave `dance_calendar_member_id`.
 La contraseña no se guarda en `localStorage`.

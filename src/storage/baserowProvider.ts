@@ -23,6 +23,8 @@ interface BaserowMemberRow {
   name?: string;
   active?: boolean;
   isAdmin?: boolean;
+  admin?: boolean;
+  Admin?: boolean;
   password?: string | null;
   Password?: string | null;
   clave?: string | null;
@@ -129,7 +131,7 @@ function memberFromRow(row: BaserowMemberRow): Member {
     id: String(row.id),
     name: row.name ?? '',
     active: row.active ?? true,
-    isAdmin: row.isAdmin ?? false,
+    isAdmin: row.Admin ?? row.admin ?? row.isAdmin ?? false,
     password: getMemberPassword(row),
     createdAt: row.createdAt ?? '',
   };
@@ -181,7 +183,7 @@ function memberToPayload(member: Member) {
   return {
     name: member.name,
     active: member.active,
-    isAdmin: member.isAdmin,
+    Admin: member.isAdmin,
     Clave: member.password,
     createdAt: member.createdAt,
   };
