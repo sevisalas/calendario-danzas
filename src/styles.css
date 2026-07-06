@@ -761,14 +761,34 @@ textarea {
 }
 
 @media (min-width: 560px) {
-  .event-card-content {
-    grid-template-columns: 1fr 130px;
+  .event-card-content.has-poster {
+    grid-template-columns: minmax(0, 1fr) 220px;
     align-items: start;
+    gap: 1.25rem;
+  }
+
+  .event-card-content.has-poster .event-card-header {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .event-card-content.has-poster .counts-row {
+    gap: 6px;
+  }
+
+  .event-card-content.has-poster .count-box {
+    min-height: 50px;
+    padding: 7px;
+  }
+
+  .event-card-content.has-poster .event-actions {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .event-poster img {
-    width: 130px;
-    height: 170px;
+    width: 220px;
+    height: 300px;
     max-height: none;
   }
 }

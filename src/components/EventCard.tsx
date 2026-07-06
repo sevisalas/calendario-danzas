@@ -31,7 +31,7 @@ export function EventCard({
 
   return (
     <article className="event-card">
-      <div className="event-card-content">
+      <div className={`event-card-content ${shouldShowPoster ? 'has-poster' : ''}`}>
         <div className="event-main">
           <div className="event-card-header">
             <div>
