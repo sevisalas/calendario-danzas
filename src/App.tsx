@@ -16,7 +16,7 @@ function App() {
   const [selectedEvent, setSelectedEvent] = useState<DanceEvent | null>(null);
   const [modalMode, setModalMode] = useState<'edit' | 'view' | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [selectedMemberId, setSelectedMemberId] = useState('');
+  const [loginName, setLoginName] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [currentMemberId, setCurrentMemberId] = useState<string | null>(() => window.localStorage.getItem(MEMBER_STORAGE_KEY));
   const [message, setMessage] = useState('');
@@ -63,10 +63,6 @@ function App() {
       .filter((event) => isEventPending(event))
       .sort(compareEvents);
   }, [events]);
-
-  const activeMembers = useMemo(() => {
-    return members.filter((member) => member.active);
-  }, [members]);
 
   const syncState = (result: StorageResult) => {
     setMembers(result.data.members);
@@ -183,36 +179,44 @@ function App() {
   };
 
   const handleLogin = () => {
-    const member = activeMembers.find((item) => item.id === selectedMemberId);
+    const enteredName = loginName.trim();
+    const enteredPassword = loginPassword.trim();
+    const member = members.find((item) => item.name.trim().toLocaleLowerCase() === enteredName.toLocaleLowerCase());
+
     if (!member) {
+      setMessage('Usuario no encontrado');
       return;
     }
 
-    const enteredPassword = loginPassword.trim();
+    if (member.active !== true) {
+      setMessage('Usuario inactivo');
+      return;
+    }
+
     const storedPassword = member.password.trim();
 
     if (!storedPassword) {
-      setMessage('Este usuario no tiene contraseña configurada');
+      setMessage('Este usuario no tiene clave configurada');
       return;
     }
 
     if (!enteredPassword || enteredPassword !== storedPassword) {
-      setMessage('Contraseña incorrecta');
+      setMessage('Clave incorrecta');
       return;
     }
 
     window.localStorage.setItem(MEMBER_STORAGE_KEY, member.id);
     setCurrentMemberId(member.id);
+    setLoginName('');
     setLoginPassword('');
-    setSelectedMemberId('');
     setMessage('');
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem(MEMBER_STORAGE_KEY);
     setCurrentMemberId(null);
+    setLoginName('');
     setLoginPassword('');
-    setSelectedMemberId('');
     setIsAdminOpen(false);
     closeAttendanceModal();
     setMessage('');
@@ -320,30 +324,33 @@ function App() {
         <main className="access-card">
           <h2>Acceso al calendario</h2>
           <label>
-            Miembro
-            <select value={selectedMemberId} onChange={(event) => setSelectedMemberId(event.target.value)}>
-              <option value="">{activeMembers.length > 0 ? 'Selecciona un miembro' : 'No hay miembros activos'}</option>
-              {activeMembers.map((member) => (
-                <option key={member.id} value={member.id}>{member.name}</option>
-              ))}
-            </select>
+            Nombre
+            <input
+              type="text"
+              value={loginName}
+              onChange={(event) => setLoginName(event.target.value)}
+              placeholder="Escribe tu nombre"
+              autoComplete="username"
+              required
+            />
           </label>
           <label>
-            Contraseña
+            Clave
             <input
               type="password"
               value={loginPassword}
               onChange={(event) => setLoginPassword(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' && selectedMemberId && loginPassword) {
+                if (event.key === 'Enter' && loginName.trim() && loginPassword.trim()) {
                   handleLogin();
                 }
               }}
               autoComplete="current-password"
+              placeholder="Escribe tu clave"
               required
             />
           </label>
-          <button className="primary-btn" onClick={handleLogin} disabled={!selectedMemberId || !loginPassword}>
+          <button className="primary-btn" onClick={handleLogin} disabled={!loginName.trim() || !loginPassword.trim()}>
             Entrar
           </button>
         </main>

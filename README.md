@@ -80,9 +80,10 @@ Aunque la tabla se llame “Asistentes”, el código interno usa `attendance`.
 
 ## Acceso
 
-Al abrirla, el usuario elige su nombre entre los miembros activos e introduce su contraseña.
+Al abrirla, el usuario escribe su nombre y su clave.
 
 - La contraseña se valida contra el campo `Clave` del miembro en Baserow.
+- El nombre se compara sin distinguir mayúsculas/minúsculas y sin espacios al principio o al final.
 - Si el miembro tiene `isAdmin=true`, verá la opción de administración.
 - Si el miembro tiene `isAdmin=false`, no verá ninguna opción de administración.
 

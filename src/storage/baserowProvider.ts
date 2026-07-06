@@ -120,7 +120,8 @@ function eventFromRow(row: BaserowEventRow): DanceEvent {
 }
 
 function getMemberPassword(row: BaserowMemberRow): string {
-  return row.Clave ?? row.clave ?? row.password ?? row.Password ?? row.contraseña ?? row.Contraseña ?? '';
+  const password = row.Clave ?? row.clave ?? row.password ?? row.Password ?? row.contraseña ?? row.Contraseña ?? '';
+  return String(password).trim();
 }
 
 function memberFromRow(row: BaserowMemberRow): Member {
