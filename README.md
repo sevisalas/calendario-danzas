@@ -1,0 +1,93 @@
+# Calendario de Danzas
+
+Aplicación web sencilla para gestionar eventos y asistencias de un grupo de danzas valencianas.
+
+## Requisitos
+
+- Node.js 18+
+- npm
+
+## Instalar dependencias
+
+```bash
+npm install
+```
+
+## Ejecutar en local
+
+```bash
+npm run dev
+```
+
+La aplicación quedará disponible en http://localhost:5173.
+
+## Baserow como base de datos
+
+La app usa Baserow como origen de datos cuando `VITE_DATA_SOURCE=baserow`.
+
+Configura [.env.local](.env.local) con:
+
+```env
+VITE_DATA_SOURCE=baserow
+VITE_SHOW_DIAGNOSTICS=false
+VITE_ADMIN_PASSWORD=1234
+
+VITE_BASEROW_API_URL=https://api.baserow.io
+VITE_BASEROW_TOKEN=AQUI_EL_TOKEN_REAL
+VITE_BASEROW_EVENTS_TABLE_ID=1063239
+VITE_BASEROW_MEMBERS_TABLE_ID=1063241
+VITE_BASEROW_ATTENDANCE_TABLE_ID=1063242
+```
+
+Si `VITE_DATA_SOURCE=baserow`:
+
+- No se usa `localStorage`.
+- No se cargan datos ficticios.
+- Si falta token, se muestra `Falta configurar VITE_BASEROW_TOKEN`.
+- Si las tablas están vacías, la pantalla principal muestra `No hay eventos pendientes`.
+
+## Tablas
+
+Eventos `1063239`:
+
+- `title`
+- `date`
+- `time`
+- `location`
+- `clothingRequired`
+- `notes`
+- `active`
+- `finished`
+- `createdAt`
+
+Miembros `1063241`:
+
+- `name`
+- `active`
+- `isAdmin`
+- `createdAt`
+
+Asistencias `1063242`:
+
+- `eventId`
+- `memberId`
+- `status`
+- `comment`
+- `updatedAt`
+- `uniqueKey`
+
+Aunque la tabla se llame “Asistentes”, el código interno usa `attendance`.
+
+## Acceso
+
+Al abrirla, el usuario elige su nombre entre los miembros activos.
+
+- Si el miembro tiene `isAdmin=true`, debe introducir `VITE_ADMIN_PASSWORD` para activar administración.
+- Si el miembro tiene `isAdmin=false`, no verá ninguna opción de administración.
+
+El miembro seleccionado se guarda en `localStorage` con la clave `dance_calendar_member_id`.
+La validación de administración se guarda con `dance_calendar_admin_verified`.
+
+## Modo local
+
+Para pruebas sin Baserow, cambia `VITE_DATA_SOURCE=local`. En ese modo la app usa `localStorage` y puede inicializar datos locales de prueba.
