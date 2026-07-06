@@ -11,6 +11,7 @@ interface AdminPanelProps {
   onCreateEvent: (event: DanceEvent) => Promise<void>;
   onUpdateEvent: (event: DanceEvent) => Promise<void>;
   onDeleteEvent: (eventId: string) => Promise<void>;
+  onUploadEventImage: (file: File) => Promise<string>;
   onCreateMember: (member: Member) => Promise<void>;
   onUpdateMember: (member: Member) => Promise<void>;
   onReloadData: () => Promise<void>;
@@ -25,6 +26,7 @@ export function AdminPanel({
   onCreateEvent,
   onUpdateEvent,
   onDeleteEvent,
+  onUploadEventImage,
   onCreateMember,
   onUpdateMember,
   onReloadData,
@@ -76,6 +78,7 @@ export function AdminPanel({
           {isEventFormOpen && (
             <EventForm
               initialEvent={editingEvent}
+              onUploadImage={onUploadEventImage}
               onSubmit={async (event) => {
                 if (editingEvent) {
                   await onUpdateEvent(event);

@@ -4,6 +4,7 @@ import type { DanceEvent } from '../types';
 interface EventFormProps {
   initialEvent?: DanceEvent | null;
   onSubmit: (event: DanceEvent) => void | Promise<void>;
+  onUploadImage?: (file: File) => Promise<string>;
   onCancel?: () => void;
 }
 
@@ -21,8 +22,10 @@ const emptyEvent = (): DanceEvent => ({
   createdAt: new Date().toISOString(),
 });
 
-export function EventForm({ initialEvent, onSubmit, onCancel }: EventFormProps) {
+export function EventForm({ initialEvent, onSubmit, onUploadImage, onCancel }: EventFormProps) {
   const [event, setEvent] = useState<DanceEvent>(emptyEvent());
+  const [imageUploadMessage, setImageUploadMessage] = useState('');
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   useEffect(() => {
     if (initialEvent) {
@@ -43,6 +46,24 @@ export function EventForm({ initialEvent, onSubmit, onCancel }: EventFormProps) 
       imageUrl: event.imageUrl.trim(),
       createdAt: initialEvent?.createdAt ?? new Date().toISOString(),
     });
+  };
+
+  const handleImageChange = async (file: File | undefined) => {
+    if (!file || !onUploadImage) {
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setImageUploadMessage('');
+    try {
+      const imageUrl = await onUploadImage(file);
+      setEvent((currentEvent) => ({ ...currentEvent, imageUrl }));
+      setImageUploadMessage('Cartel subido');
+    } catch {
+      setImageUploadMessage('No se ha podido subir el cartel');
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   return (
@@ -76,14 +97,26 @@ export function EventForm({ initialEvent, onSubmit, onCancel }: EventFormProps) 
         <textarea value={event.notes} onChange={(e) => setEvent({ ...event, notes: e.target.value })} rows={3} />
       </label>
       <label>
-        URL del cartel
+        Cartel
         <input
-          type="url"
-          value={event.imageUrl}
-          onChange={(e) => setEvent({ ...event, imageUrl: e.target.value })}
-          placeholder="https://..."
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            void handleImageChange(e.target.files?.[0]);
+            e.target.value = '';
+          }}
+          disabled={isUploadingImage || !onUploadImage}
         />
       </label>
+      {event.imageUrl && (
+        <div className="form-image-preview">
+          <img src={event.imageUrl} alt={`Cartel de ${event.title || 'evento'}`} />
+          <button type="button" className="secondary-btn" onClick={() => setEvent({ ...event, imageUrl: '' })}>
+            Quitar cartel
+          </button>
+        </div>
+      )}
+      {imageUploadMessage && <p className="form-hint">{imageUploadMessage}</p>}
       <label>
         Activo
         <select value={event.active ? 'Sí' : 'No'} onChange={(e) => setEvent({ ...event, active: e.target.value === 'Sí' })}>
@@ -100,7 +133,9 @@ export function EventForm({ initialEvent, onSubmit, onCancel }: EventFormProps) 
       </label>
       <div className="modal-actions">
         {onCancel && <button type="button" className="secondary-btn" onClick={onCancel}>Cancelar</button>}
-        <button type="submit" className="primary-btn">Guardar</button>
+        <button type="submit" className="primary-btn" disabled={isUploadingImage}>
+          {isUploadingImage ? 'Subiendo cartel...' : 'Guardar'}
+        </button>
       </div>
     </form>
   );

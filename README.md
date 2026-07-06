@@ -79,6 +79,10 @@ Asistencias `1063242`:
 
 Aunque la tabla se llame “Asistentes”, el código interno usa `attendance`.
 
+## Carteles de eventos
+
+En administración, el formulario de evento permite seleccionar una imagen del ordenador. La app la sube a Baserow y guarda la URL generada en `imageUrl`.
+
 ## Acceso
 
 Al abrirla, el usuario escribe su nombre y su clave.

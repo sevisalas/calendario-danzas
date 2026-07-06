@@ -183,6 +183,19 @@ function getLocalData(): AppData {
   return data;
 }
 
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(String(reader.result ?? ''));
+    };
+    reader.onerror = () => {
+      reject(new Error('No se ha podido leer la imagen'));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 export function getConfiguredDataSource(): DataSourceMode {
   return DATA_SOURCE === 'local' ? 'local' : 'baserow';
 }
@@ -256,6 +269,14 @@ export async function deleteEvent(eventId: string): Promise<StorageResult> {
     events: data.events.filter((event) => event.id !== eventId),
     attendances: data.attendances.filter((attendance) => attendance.eventId !== eventId),
   }));
+}
+
+export async function uploadEventImage(file: File): Promise<string> {
+  if (getConfiguredDataSource() === 'baserow') {
+    return baserowProvider.uploadFile(file);
+  }
+
+  return readFileAsDataUrl(file);
 }
 
 export async function addAttendance(attendance: Attendance): Promise<StorageResult> {

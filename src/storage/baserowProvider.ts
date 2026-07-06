@@ -50,6 +50,11 @@ interface BaserowAttendanceRow {
   uniqueKey?: string;
 }
 
+interface BaserowFileUploadResponse {
+  url?: string;
+  name?: string;
+}
+
 const VALID_ATTENDANCE_STATUSES: AttendanceStatus[] = ['Sí', 'No', 'Quizás'];
 
 const config = {
@@ -75,6 +80,10 @@ function tableUrl(tableId: string, rowId?: string): string {
   return rowId ? `${base}${rowId}/?user_field_names=true` : `${base}?user_field_names=true`;
 }
 
+function userFileUploadUrl(): string {
+  return `${config.apiUrl.replace(/\/$/, '')}/api/user-files/upload-file/`;
+}
+
 async function baserowFetch<T>(url: string, init?: RequestInit): Promise<T> {
   requireConfig();
 
@@ -94,6 +103,25 @@ async function baserowFetch<T>(url: string, init?: RequestInit): Promise<T> {
 
   if (response.status === 204) {
     return undefined as T;
+  }
+
+  return response.json() as Promise<T>;
+}
+
+async function baserowUploadFetch<T>(url: string, body: FormData): Promise<T> {
+  requireConfig();
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Token ${config.token}`,
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Baserow ${response.status}: ${detail || response.statusText}`);
   }
 
   return response.json() as Promise<T>;
@@ -258,6 +286,18 @@ export async function saveEvent(event: DanceEvent): Promise<AppData> {
   }
 
   return getAllData();
+}
+
+export async function uploadFile(file: File): Promise<string> {
+  const body = new FormData();
+  body.append('file', file);
+
+  const uploadedFile = await baserowUploadFetch<BaserowFileUploadResponse>(userFileUploadUrl(), body);
+  if (!uploadedFile.url) {
+    throw new Error('No se ha podido obtener la URL del archivo subido');
+  }
+
+  return uploadedFile.url;
 }
 
 export async function deleteEvent(id: string): Promise<AppData> {

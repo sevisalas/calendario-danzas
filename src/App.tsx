@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Attendance, DanceEvent, Member } from './types';
-import { addAttendance, addEvent, addMember, deleteEvent, getConfiguredDataSource, loadData, removeAttendance, saveSampleEvents, updateEvent, updateMember, type DataSourceMeta, type StorageResult } from './storage';
+import { addAttendance, addEvent, addMember, deleteEvent, getConfiguredDataSource, loadData, removeAttendance, saveSampleEvents, updateEvent, updateMember, uploadEventImage, type DataSourceMeta, type StorageResult } from './storage';
 import { getAttendanceSummary, isEventPending, compareEvents } from './utils';
 import { EventCard } from './components/EventCard';
 import { AttendanceModal } from './components/AttendanceModal';
@@ -263,6 +263,10 @@ function App() {
     }
   };
 
+  const handleUploadEventImage = async (file: File) => {
+    return uploadEventImage(file);
+  };
+
   const handleCreateMember = async (member: Member) => {
     setIsSaving(true);
     try {
@@ -434,6 +438,7 @@ function App() {
           onCreateEvent={handleCreateEvent}
           onUpdateEvent={handleUpdateEvent}
           onDeleteEvent={handleDeleteEvent}
+          onUploadEventImage={handleUploadEventImage}
           onCreateMember={handleCreateMember}
           onUpdateMember={handleUpdateMember}
           onReloadData={handleReloadData}
