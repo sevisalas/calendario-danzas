@@ -15,6 +15,7 @@ const emptyEvent = (): DanceEvent => ({
   location: '',
   clothingRequired: false,
   notes: '',
+  imageUrl: '',
   active: true,
   finished: false,
   createdAt: new Date().toISOString(),
@@ -39,6 +40,7 @@ export function EventForm({ initialEvent, onSubmit, onCancel }: EventFormProps) 
       title: event.title.trim(),
       location: event.location.trim(),
       notes: event.notes.trim(),
+      imageUrl: event.imageUrl.trim(),
       createdAt: initialEvent?.createdAt ?? new Date().toISOString(),
     });
   };
@@ -72,6 +74,15 @@ export function EventForm({ initialEvent, onSubmit, onCancel }: EventFormProps) 
       <label>
         Observaciones
         <textarea value={event.notes} onChange={(e) => setEvent({ ...event, notes: e.target.value })} rows={3} />
+      </label>
+      <label>
+        URL del cartel
+        <input
+          type="url"
+          value={event.imageUrl}
+          onChange={(e) => setEvent({ ...event, imageUrl: e.target.value })}
+          placeholder="https://..."
+        />
       </label>
       <label>
         Activo

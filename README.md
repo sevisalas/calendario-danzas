@@ -55,6 +55,7 @@ Eventos `1063239`:
 - `location`
 - `clothingRequired`
 - `notes`
+- `imageUrl`
 - `active`
 - `finished`
 - `createdAt`

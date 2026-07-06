@@ -18,6 +18,7 @@ export interface DanceEvent {
   location: string;
   clothingRequired: boolean;
   notes: string;
+  imageUrl: string;
   active: boolean;
   finished: boolean;
   createdAt: string;

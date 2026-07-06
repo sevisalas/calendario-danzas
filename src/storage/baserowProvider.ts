@@ -13,6 +13,12 @@ interface BaserowEventRow {
   location?: string;
   clothingRequired?: boolean;
   notes?: string;
+  imageUrl?: string | null;
+  ImageUrl?: string | null;
+  Imagen?: string | null;
+  imagen?: string | null;
+  cartel?: string | null;
+  Cartel?: string | null;
   active?: boolean;
   finished?: boolean;
   createdAt?: string;
@@ -107,6 +113,8 @@ async function listRows<T>(tableId: string): Promise<T[]> {
 }
 
 function eventFromRow(row: BaserowEventRow): DanceEvent {
+  const imageUrl = row.imageUrl ?? row.ImageUrl ?? row.Imagen ?? row.imagen ?? row.cartel ?? row.Cartel ?? '';
+
   return {
     id: String(row.id),
     title: row.title ?? '',
@@ -115,6 +123,7 @@ function eventFromRow(row: BaserowEventRow): DanceEvent {
     location: row.location ?? '',
     clothingRequired: row.clothingRequired ?? false,
     notes: row.notes ?? '',
+    imageUrl: String(imageUrl || '').trim(),
     active: row.active ?? true,
     finished: row.finished ?? false,
     createdAt: row.createdAt ?? '',
@@ -173,6 +182,7 @@ function eventToPayload(event: DanceEvent) {
     location: event.location,
     clothingRequired: event.clothingRequired,
     notes: event.notes,
+    imageUrl: event.imageUrl || '',
     active: event.active,
     finished: event.finished,
     createdAt: event.createdAt,
