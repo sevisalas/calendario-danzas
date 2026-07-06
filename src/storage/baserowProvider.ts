@@ -23,7 +23,10 @@ interface BaserowMemberRow {
   name?: string;
   active?: boolean;
   isAdmin?: boolean;
-  password?: string;
+  password?: string | null;
+  Password?: string | null;
+  contraseña?: string | null;
+  Contraseña?: string | null;
   createdAt?: string;
 }
 
@@ -114,15 +117,32 @@ function eventFromRow(row: BaserowEventRow): DanceEvent {
   };
 }
 
+function getMemberPassword(row: BaserowMemberRow): string {
+  return row.password ?? row.Password ?? row.contraseña ?? row.Contraseña ?? '';
+}
+
 function memberFromRow(row: BaserowMemberRow): Member {
-  return {
+  const member = {
     id: String(row.id),
     name: row.name ?? '',
     active: row.active ?? true,
     isAdmin: row.isAdmin ?? false,
-    password: row.password ?? '',
+    password: getMemberPassword(row),
     createdAt: row.createdAt ?? '',
   };
+
+  if (import.meta.env.DEV) {
+    console.log('Login member loaded', {
+      id: member.id,
+      name: member.name,
+      active: member.active,
+      isAdmin: member.isAdmin,
+      hasPassword: Boolean(member.password),
+      passwordLength: member.password?.length ?? 0,
+    });
+  }
+
+  return member;
 }
 
 function attendanceFromRow(row: BaserowAttendanceRow): Attendance | null {

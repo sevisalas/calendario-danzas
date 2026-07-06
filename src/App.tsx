@@ -188,7 +188,15 @@ function App() {
       return;
     }
 
-    if (!loginPassword || loginPassword !== member.password) {
+    const enteredPassword = loginPassword.trim();
+    const storedPassword = member.password.trim();
+
+    if (!storedPassword) {
+      setMessage('Este usuario no tiene contraseña configurada');
+      return;
+    }
+
+    if (!enteredPassword || enteredPassword !== storedPassword) {
       setMessage('Contraseña incorrecta');
       return;
     }
