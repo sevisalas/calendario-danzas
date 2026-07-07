@@ -208,6 +208,23 @@ h3 {
   color: var(--color-primary);
 }
 
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  margin: 0.75rem 0 1rem;
+}
+
+.top-actions button {
+  width: auto;
+  min-height: 36px;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .icon-btn {
   min-width: 42px;
   min-height: 42px;
@@ -854,6 +871,11 @@ textarea {
     width: 100%;
   }
 
+  .top-actions .admin-link-btn,
+  .top-actions .expand-button {
+    width: auto;
+  }
+
   .event-actions {
     display: grid;
     gap: 10px;
@@ -883,6 +905,17 @@ textarea {
 
   .pill {
     justify-self: start;
+  }
+}
+
+@media (max-width: 420px) {
+  .top-actions {
+    gap: 0.4rem;
+  }
+
+  .top-actions button {
+    padding: 0.4rem 0.55rem;
+    font-size: 0.8rem;
   }
 }
 

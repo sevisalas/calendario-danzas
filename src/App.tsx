@@ -329,18 +329,6 @@ function App() {
             <h1>Calendario de Eventos</h1>
             <p className="hero-copy">Próximos ensayos, actuaciones e indumentaria</p>
           </div>
-          <div className="session-actions">
-            {isAdmin && (
-              <button className="admin-link-btn" onClick={() => setIsAdminOpen((value) => !value)}>
-                {isAdminOpen ? 'Calendario' : 'Administración'}
-              </button>
-            )}
-            {isAuthenticated && (
-              <button className="session-link-btn" onClick={handleLogout}>
-                Cambiar usuario
-              </button>
-            )}
-          </div>
         </div>
       </header>
 
@@ -418,6 +406,22 @@ function App() {
       </section>
       )}
 
+      {isAuthenticated && (
+        <div className="top-actions">
+          {isAdmin && (
+            <button className="admin-link-btn" onClick={() => setIsAdminOpen((value) => !value)}>
+              Admin
+            </button>
+          )}
+          <button className="expand-button" onClick={expandAllEvents}>
+            Ver todos
+          </button>
+          <button className="expand-button" onClick={collapseAllEvents}>
+            Ocultar todos
+          </button>
+        </div>
+      )}
+
       {isAuthenticated && !isAdminOpen && (
         <main className="content-stack">
           {pendingEvents.length === 0 ? (
@@ -434,16 +438,6 @@ function App() {
             </div>
           ) : (
             <>
-              <div className="event-list-controls">
-                <div className="expand-collapse-controls">
-                  <button className="expand-button" onClick={expandAllEvents}>
-                    Ver todos
-                  </button>
-                  <button className="expand-button" onClick={collapseAllEvents}>
-                    Ocultar todos
-                  </button>
-                </div>
-              </div>
               {pendingEvents.map((event) => {
                 const eventAttendances = attendances.filter((attendance) => attendance.eventId === event.id);
                 const summary = getAttendanceSummary(eventAttendances);
