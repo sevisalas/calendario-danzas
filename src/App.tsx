@@ -326,8 +326,8 @@ function App() {
         <div className="hero-content">
           <div>
             <p className="eyebrow">Grup de ball - Falla Plaça Porta del Sol</p>
-            <h1>Calendario de Eventos</h1>
-            <p className="hero-copy">Próximos ensayos, actuaciones e indumentaria</p>
+            <h1>Calendario de eventos</h1>
+            <p className="hero-copy">Próximos ensayos y actuaciones</p>
           </div>
         </div>
       </header>
