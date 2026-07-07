@@ -410,7 +410,7 @@ function App() {
         <div className="top-actions">
           {isAdmin && (
             <button className="admin-link-btn" onClick={() => setIsAdminOpen((value) => !value)}>
-              Admin
+              {isAdminOpen ? 'Calendario' : 'Admin'}
             </button>
           )}
           <button className="expand-button" onClick={expandAllEvents}>
