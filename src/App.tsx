@@ -437,10 +437,10 @@ function App() {
               <div className="event-list-controls">
                 <div className="expand-collapse-controls">
                   <button className="expand-button" onClick={expandAllEvents}>
-                    Expandir todos
+                    Ver todos
                   </button>
                   <button className="expand-button" onClick={collapseAllEvents}>
-                    Contraer todos
+                    Ocultar todos
                   </button>
                 </div>
               </div>

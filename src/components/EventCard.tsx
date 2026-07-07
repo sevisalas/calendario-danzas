@@ -41,6 +41,9 @@ export function EventCard({
             <p className="event-date">{formatDateLabel(event.date)} · {event.time}</p>
             <h2>{event.title}</h2>
             <p className="event-place">{event.location}</p>
+            <span className={`pill collapsed-pill ${event.clothingRequired ? 'pill-yes' : 'pill-no'}`}>
+              {event.clothingRequired ? 'Indumentaria requerida' : 'Sin indumentaria'}
+            </span>
           </div>
 
           <div className="attendance-summary">
@@ -51,7 +54,7 @@ export function EventCard({
         </div>
 
         <button className="expand-button" onClick={onToggleExpanded}>
-          Expandir
+          Ver detalles
         </button>
       </article>
     );
@@ -112,7 +115,7 @@ export function EventCard({
         )}
       </div>
       <button className="expand-button expanded-toggle" onClick={onToggleExpanded}>
-        Contraer
+        Ocultar detalles
       </button>
     </article>
   );
