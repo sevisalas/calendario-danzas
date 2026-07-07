@@ -36,21 +36,14 @@ export function EventCard({
   if (!isExpanded) {
     return (
       <article className="event-card event-card-collapsed">
-        <div className="event-summary">
-          <div className="event-summary-main">
-            <p className="event-date">{formatDateLabel(event.date)} · {event.time}</p>
-            <h2>{event.title}</h2>
-            <p className="event-place">{event.location}</p>
-            <span className={`pill collapsed-pill ${event.clothingRequired ? 'pill-yes' : 'pill-no'}`}>
-              {event.clothingRequired ? 'Indumentaria requerida' : 'Sin indumentaria'}
-            </span>
-          </div>
-
-          <div className="attendance-summary">
-            <span>Sí <strong>{summary.yes}</strong></span>
-            <span>Quizás <strong>{summary.maybe}</strong></span>
-            <span>No <strong>{summary.no}</strong></span>
-          </div>
+        <div className="event-collapsed-summary">
+          <p className="collapsed-meta">
+            {[formatDateLabel(event.date), event.time, event.location].filter(Boolean).join(' · ')}
+          </p>
+          <h2 className="collapsed-title">{event.title}</h2>
+          <p className="collapsed-status">
+            Indumentaria: {event.clothingRequired ? 'Sí' : 'No'} · Asistentes: {summary.yes}
+          </p>
         </div>
 
         <button className="expand-button" onClick={onToggleExpanded}>

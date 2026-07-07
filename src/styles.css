@@ -307,7 +307,7 @@ h3 {
 .event-card-collapsed {
   padding: 13px;
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .access-card {
@@ -354,6 +354,32 @@ h3 {
 
 .event-summary-main {
   min-width: 0;
+}
+
+.event-collapsed-summary {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.collapsed-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.collapsed-title {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+.collapsed-status {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-primary);
 }
 
 .event-card-content {
