@@ -27,6 +27,10 @@ interface BaserowEventRow {
 interface BaserowMemberRow {
   id: number;
   name?: string;
+  nombre?: string;
+  Nombre?: string;
+  usuario?: string;
+  Usuario?: string;
   active?: boolean;
   isAdmin?: boolean;
   admin?: boolean;
@@ -181,10 +185,21 @@ function getMemberPassword(row: BaserowMemberRow): string {
   return String(password).trim();
 }
 
+function getMemberUsername(row: BaserowMemberRow): string {
+  const username = row.usuario ?? row.Usuario ?? row.name ?? row.nombre ?? row.Nombre ?? '';
+  return String(username).trim();
+}
+
+function getMemberDisplayName(row: BaserowMemberRow): string {
+  const name = row.nombre ?? row.Nombre ?? row.name ?? row.usuario ?? row.Usuario ?? '';
+  return String(name).trim();
+}
+
 function memberFromRow(row: BaserowMemberRow): Member {
   const member = {
     id: String(row.id),
-    name: row.name ?? '',
+    username: getMemberUsername(row),
+    name: getMemberDisplayName(row),
     active: row.active ?? true,
     isAdmin: row.Admin ?? row.admin ?? row.isAdmin ?? false,
     password: getMemberPassword(row),
@@ -194,6 +209,7 @@ function memberFromRow(row: BaserowMemberRow): Member {
   if (import.meta.env.DEV) {
     console.log('Login member loaded', {
       id: member.id,
+      username: member.username,
       name: member.name,
       active: member.active,
       isAdmin: member.isAdmin,
@@ -237,7 +253,8 @@ function eventToPayload(event: DanceEvent) {
 
 function memberToPayload(member: Member) {
   return {
-    name: member.name,
+    usuario: member.username,
+    nombre: member.name,
     active: member.active,
     Admin: member.isAdmin,
     Clave: member.password,
@@ -281,7 +298,7 @@ export async function getAllData(): Promise<AppData> {
 
   return {
     events: eventRows.map(eventFromRow).filter((event) => event.title),
-    members: memberRows.map(memberFromRow).filter((member) => member.name),
+    members: memberRows.map(memberFromRow).filter((member) => member.username && member.name),
     attendances: attendanceRows
       .map(attendanceFromRow)
       .filter((attendance): attendance is Attendance => Boolean(attendance)),

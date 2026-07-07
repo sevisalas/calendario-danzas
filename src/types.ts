@@ -3,6 +3,7 @@ export type AttendanceFormStatus = AttendanceStatus | 'En blanco';
 
 export interface Member {
   id: string;
+  username: string;
   name: string;
   active: boolean;
   isAdmin: boolean;

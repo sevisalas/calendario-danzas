@@ -203,7 +203,7 @@ function App() {
   const handleLogin = () => {
     const enteredName = loginName.trim();
     const enteredPassword = loginPassword.trim();
-    const member = members.find((item) => item.name.trim().toLocaleLowerCase() === enteredName.toLocaleLowerCase());
+    const member = members.find((item) => item.username.trim().toLocaleLowerCase() === enteredName.toLocaleLowerCase());
 
     if (!member) {
       setMessage('Usuario no encontrado');
@@ -350,12 +350,12 @@ function App() {
         <main className="access-card">
           <h2>Acceso al calendario</h2>
           <label>
-            Nombre
+            Usuario
             <input
               type="text"
               value={loginName}
               onChange={(event) => setLoginName(event.target.value)}
-              placeholder="Escribe tu nombre"
+              placeholder="Escribe tu usuario"
               autoComplete="username"
               required
             />

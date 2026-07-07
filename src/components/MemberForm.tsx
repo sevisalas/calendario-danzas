@@ -9,6 +9,7 @@ interface MemberFormProps {
 
 const emptyMember = (): Member => ({
   id: crypto.randomUUID(),
+  username: '',
   name: '',
   active: true,
   isAdmin: false,
@@ -32,6 +33,7 @@ export function MemberForm({ initialMember, onSubmit, onCancel }: MemberFormProp
     onSubmit({
       ...member,
       id: initialMember?.id ?? crypto.randomUUID(),
+      username: member.username.trim(),
       name: member.name.trim(),
       password: member.password,
       createdAt: initialMember?.createdAt ?? new Date().toISOString(),
@@ -42,7 +44,11 @@ export function MemberForm({ initialMember, onSubmit, onCancel }: MemberFormProp
     <form className="form-card" onSubmit={handleSubmit}>
       <h3>{initialMember ? 'Editar miembro' : 'Crear miembro'}</h3>
       <label>
-        Nombre
+        Usuario
+        <input value={member.username} onChange={(e) => setMember({ ...member, username: e.target.value })} required />
+      </label>
+      <label>
+        Nombre visible
         <input value={member.name} onChange={(e) => setMember({ ...member, name: e.target.value })} required />
       </label>
       <label>

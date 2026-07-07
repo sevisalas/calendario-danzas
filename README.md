@@ -62,7 +62,8 @@ Eventos `1063239`:
 
 Miembros `1063241`:
 
-- `name`
+- `usuario`
+- `nombre`
 - `active`
 - `Admin`
 - `Clave`
@@ -85,10 +86,11 @@ En administración, el formulario de evento permite seleccionar una imagen del o
 
 ## Acceso
 
-Al abrirla, el usuario escribe su nombre y su clave.
+Al abrirla, el usuario escribe su usuario y su clave.
 
 - La contraseña se valida contra el campo `Clave` del miembro en Baserow.
-- El nombre se compara sin distinguir mayúsculas/minúsculas y sin espacios al principio o al final.
+- El usuario se valida contra el campo `usuario` de Baserow, sin distinguir mayúsculas/minúsculas y sin espacios al principio o al final.
+- El campo `nombre` se usa solo como nombre visible dentro de la app.
 - Si el miembro tiene `Admin=true`, verá la opción de administración.
 - Si el miembro tiene `Admin=false`, no verá ninguna opción de administración.
 
