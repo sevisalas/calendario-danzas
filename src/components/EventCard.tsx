@@ -7,6 +7,8 @@ interface EventCardProps {
   attendances: Attendance[];
   members: Member[];
   summary: ReturnType<typeof getAttendanceSummary>;
+  isExpanded: boolean;
+  onToggleExpanded: () => void;
   onUpdateAttendance: () => void;
   onViewInscritos: () => void;
 }
@@ -16,6 +18,8 @@ export function EventCard({
   attendances,
   members,
   summary,
+  isExpanded,
+  onToggleExpanded,
   onUpdateAttendance,
   onViewInscritos,
 }: EventCardProps) {
@@ -28,6 +32,30 @@ export function EventCard({
   useEffect(() => {
     setHasPosterError(false);
   }, [event.imageUrl]);
+
+  if (!isExpanded) {
+    return (
+      <article className="event-card event-card-collapsed">
+        <div className="event-summary">
+          <div className="event-summary-main">
+            <p className="event-date">{formatDateLabel(event.date)} · {event.time}</p>
+            <h2>{event.title}</h2>
+            <p className="event-place">{event.location}</p>
+          </div>
+
+          <div className="attendance-summary">
+            <span>Sí <strong>{summary.yes}</strong></span>
+            <span>Quizás <strong>{summary.maybe}</strong></span>
+            <span>No <strong>{summary.no}</strong></span>
+          </div>
+        </div>
+
+        <button className="expand-button" onClick={onToggleExpanded}>
+          Expandir
+        </button>
+      </article>
+    );
+  }
 
   return (
     <article className="event-card">
@@ -83,6 +111,9 @@ export function EventCard({
           </div>
         )}
       </div>
+      <button className="expand-button expanded-toggle" onClick={onToggleExpanded}>
+        Contraer
+      </button>
     </article>
   );
 }

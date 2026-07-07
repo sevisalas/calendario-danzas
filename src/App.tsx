@@ -16,6 +16,7 @@ function App() {
   const [selectedEvent, setSelectedEvent] = useState<DanceEvent | null>(null);
   const [modalMode, setModalMode] = useState<'edit' | 'view' | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [expandedEventIds, setExpandedEventIds] = useState<Set<string>>(() => new Set());
   const [loginName, setLoginName] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [currentMemberId, setCurrentMemberId] = useState<string | null>(() => window.localStorage.getItem(MEMBER_STORAGE_KEY));
@@ -132,6 +133,27 @@ function App() {
   const closeAttendanceModal = () => {
     setSelectedEvent(null);
     setModalMode(null);
+  };
+
+  const toggleEventExpanded = (eventId: string) => {
+    setExpandedEventIds((currentIds) => {
+      const nextIds = new Set(currentIds);
+      if (nextIds.has(eventId)) {
+        nextIds.delete(eventId);
+      } else {
+        nextIds.add(eventId);
+      }
+
+      return nextIds;
+    });
+  };
+
+  const expandAllEvents = () => {
+    setExpandedEventIds(new Set(pendingEvents.map((event) => event.id)));
+  };
+
+  const collapseAllEvents = () => {
+    setExpandedEventIds(new Set());
   };
 
   const handleSaveAttendance = async (attendance: Attendance) => {
@@ -411,21 +433,35 @@ function App() {
               )}
             </div>
           ) : (
-            pendingEvents.map((event) => {
-              const eventAttendances = attendances.filter((attendance) => attendance.eventId === event.id);
-              const summary = getAttendanceSummary(eventAttendances);
-              return (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  attendances={eventAttendances}
-                  members={members}
-                  summary={summary}
-                  onUpdateAttendance={() => openAttendanceModal(event, 'edit')}
-                  onViewInscritos={() => openAttendanceModal(event, 'view')}
-                />
-              );
-            })
+            <>
+              <div className="event-list-controls">
+                <div className="expand-collapse-controls">
+                  <button className="expand-button" onClick={expandAllEvents}>
+                    Expandir todos
+                  </button>
+                  <button className="expand-button" onClick={collapseAllEvents}>
+                    Contraer todos
+                  </button>
+                </div>
+              </div>
+              {pendingEvents.map((event) => {
+                const eventAttendances = attendances.filter((attendance) => attendance.eventId === event.id);
+                const summary = getAttendanceSummary(eventAttendances);
+                return (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    attendances={eventAttendances}
+                    members={members}
+                    summary={summary}
+                    isExpanded={expandedEventIds.has(event.id)}
+                    onToggleExpanded={() => toggleEventExpanded(event.id)}
+                    onUpdateAttendance={() => openAttendanceModal(event, 'edit')}
+                    onViewInscritos={() => openAttendanceModal(event, 'view')}
+                  />
+                );
+              })}
+            </>
           )}
         </main>
       )}
