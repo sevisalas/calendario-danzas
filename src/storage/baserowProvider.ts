@@ -29,6 +29,8 @@ interface BaserowMemberRow {
   name?: string;
   nombre?: string;
   Nombre?: string;
+  nombre_a_mostrar?: string;
+  Nombre_a_mostrar?: string;
   usuario?: string;
   Usuario?: string;
   active?: boolean;
@@ -186,12 +188,12 @@ function getMemberPassword(row: BaserowMemberRow): string {
 }
 
 function getMemberUsername(row: BaserowMemberRow): string {
-  const username = row.usuario ?? row.Usuario ?? row.name ?? row.nombre ?? row.Nombre ?? '';
+  const username = row.usuario ?? row.Usuario ?? '';
   return String(username).trim();
 }
 
 function getMemberDisplayName(row: BaserowMemberRow): string {
-  const name = row.nombre ?? row.Nombre ?? row.name ?? row.usuario ?? row.Usuario ?? '';
+  const name = row.nombre_a_mostrar ?? row.Nombre_a_mostrar ?? row.nombre ?? row.Nombre ?? row.name ?? '';
   return String(name).trim();
 }
 
@@ -254,7 +256,7 @@ function eventToPayload(event: DanceEvent) {
 function memberToPayload(member: Member) {
   return {
     usuario: member.username,
-    nombre: member.name,
+    nombre_a_mostrar: member.name,
     active: member.active,
     Admin: member.isAdmin,
     Clave: member.password,

@@ -63,7 +63,7 @@ Eventos `1063239`:
 Miembros `1063241`:
 
 - `usuario`
-- `nombre`
+- `nombre_a_mostrar`
 - `active`
 - `Admin`
 - `Clave`
@@ -90,7 +90,7 @@ Al abrirla, el usuario escribe su usuario y su clave.
 
 - La contraseña se valida contra el campo `Clave` del miembro en Baserow.
 - El usuario se valida contra el campo `usuario` de Baserow, sin distinguir mayúsculas/minúsculas y sin espacios al principio o al final.
-- El campo `nombre` se usa solo como nombre visible dentro de la app.
+- El campo `nombre_a_mostrar` se usa como nombre visible dentro de la app.
 - Si el miembro tiene `Admin=true`, verá la opción de administración.
 - Si el miembro tiene `Admin=false`, no verá ninguna opción de administración.
 
