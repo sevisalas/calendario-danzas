@@ -286,6 +286,7 @@ h3 {
 
 .content-stack,
 .admin-panel,
+.profile-panel,
 .admin-grid,
 .list-stack {
   display: grid;
@@ -670,6 +671,10 @@ h3 {
   margin-top: 12px;
 }
 
+.profile-panel {
+  margin-top: 12px;
+}
+
 .admin-header,
 .admin-section-header {
   display: flex;
@@ -684,12 +689,24 @@ h3 {
   background: #F9FAFB;
 }
 
+.profile-form {
+  width: min(100%, 560px);
+}
+
 .form-card label,
 .modal-body label {
   display: grid;
   gap: 7px;
   margin-top: 10px;
   font-weight: 700;
+}
+
+.profile-form label {
+  font-weight: 500;
+}
+
+.profile-form input {
+  font-weight: 400;
 }
 
 .form-hint {

@@ -5,6 +5,7 @@ import { getAttendanceSummary, isEventPending, compareEvents } from './utils';
 import { EventCard } from './components/EventCard';
 import { AttendanceModal } from './components/AttendanceModal';
 import { AdminPanel } from './components/AdminPanel';
+import { ProfilePanel } from './components/ProfilePanel';
 
 const MEMBER_STORAGE_KEY = 'dance_calendar_member_id';
 const showDiagnostics = import.meta.env.VITE_SHOW_DIAGNOSTICS === 'true';
@@ -16,6 +17,7 @@ function App() {
   const [selectedEvent, setSelectedEvent] = useState<DanceEvent | null>(null);
   const [modalMode, setModalMode] = useState<'edit' | 'view' | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [expandedEventIds, setExpandedEventIds] = useState<Set<string>>(() => new Set());
   const [loginName, setLoginName] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -55,6 +57,7 @@ function App() {
       window.localStorage.removeItem(MEMBER_STORAGE_KEY);
       setCurrentMemberId(null);
       setIsAdminOpen(false);
+      setIsProfileOpen(false);
       closeAttendanceModal();
     }
   }, [currentMemberId, hasLoadedData, members]);
@@ -240,6 +243,7 @@ function App() {
     setLoginName('');
     setLoginPassword('');
     setIsAdminOpen(false);
+    setIsProfileOpen(false);
     closeAttendanceModal();
     setMessage('');
   };
@@ -308,6 +312,19 @@ function App() {
       const result = await updateMember(member);
       syncState(result);
       showTemporaryMessage('Miembro guardado');
+    } catch (error) {
+      setDataSourceError(error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleUpdateProfile = async (member: Member) => {
+    setIsSaving(true);
+    try {
+      const result = await updateMember(member);
+      syncState(result);
+      showTemporaryMessage('Perfil actualizado');
     } catch (error) {
       setDataSourceError(error);
     } finally {
@@ -413,6 +430,11 @@ function App() {
               {isAdminOpen ? 'Calendario' : 'Admin'}
             </button>
           )}
+          {!isAdmin && (
+            <button className="admin-link-btn" onClick={() => setIsProfileOpen((value) => !value)}>
+              {isProfileOpen ? 'Calendario' : 'Perfil'}
+            </button>
+          )}
           <button className="expand-button" onClick={expandAllEvents}>
             Ver todos
           </button>
@@ -425,7 +447,7 @@ function App() {
         </div>
       )}
 
-      {isAuthenticated && !isAdminOpen && (
+      {isAuthenticated && !isAdminOpen && !isProfileOpen && (
         <main className="content-stack">
           {pendingEvents.length === 0 ? (
             <div className="empty-state empty-state-panel">
@@ -479,6 +501,14 @@ function App() {
           onClose={() => {
             setIsAdminOpen(false);
           }}
+        />
+      )}
+
+      {isAuthenticated && !isAdmin && isProfileOpen && currentMember && (
+        <ProfilePanel
+          member={currentMember}
+          onSave={handleUpdateProfile}
+          isSaving={isSaving}
         />
       )}
 
