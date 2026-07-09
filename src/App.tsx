@@ -6,6 +6,7 @@ import { EventCard } from './components/EventCard';
 import { AttendanceModal } from './components/AttendanceModal';
 import { AdminPanel } from './components/AdminPanel';
 import { ProfilePanel } from './components/ProfilePanel';
+import { HelpModal } from './components/HelpModal';
 
 const MEMBER_STORAGE_KEY = 'dance_calendar_member_id';
 const showDiagnostics = import.meta.env.VITE_SHOW_DIAGNOSTICS === 'true';
@@ -18,6 +19,7 @@ function App() {
   const [modalMode, setModalMode] = useState<'edit' | 'view' | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [expandedEventIds, setExpandedEventIds] = useState<Set<string>>(() => new Set());
   const [loginName, setLoginName] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -58,6 +60,7 @@ function App() {
       setCurrentMemberId(null);
       setIsAdminOpen(false);
       setIsProfileOpen(false);
+      setIsHelpOpen(false);
       closeAttendanceModal();
     }
   }, [currentMemberId, hasLoadedData, members]);
@@ -244,6 +247,7 @@ function App() {
     setLoginPassword('');
     setIsAdminOpen(false);
     setIsProfileOpen(false);
+    setIsHelpOpen(false);
     closeAttendanceModal();
     setMessage('');
   };
@@ -441,6 +445,9 @@ function App() {
           <button className="expand-button" onClick={collapseAllEvents}>
             Ocultar todos
           </button>
+          <button className="session-link-btn" onClick={() => setIsHelpOpen(true)}>
+            Ayuda
+          </button>
           <button className="session-link-btn" onClick={handleLogout}>
             Salir
           </button>
@@ -524,6 +531,10 @@ function App() {
           onRemove={handleRemoveAttendance}
           isSaving={isSaving}
         />
+      )}
+
+      {isAuthenticated && isHelpOpen && (
+        <HelpModal isAdmin={isAdmin} onClose={() => setIsHelpOpen(false)} />
       )}
     </div>
   );
