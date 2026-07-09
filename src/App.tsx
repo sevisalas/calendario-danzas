@@ -419,6 +419,9 @@ function App() {
           <button className="expand-button" onClick={collapseAllEvents}>
             Ocultar todos
           </button>
+          <button className="session-link-btn" onClick={handleLogout}>
+            Salir
+          </button>
         </div>
       )}
 
