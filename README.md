@@ -2,6 +2,11 @@
 
 Aplicación web sencilla para gestionar eventos y asistencias de un grupo de danzas valencianas.
 
+## Manuales
+
+- [Manual de usuario](docs/manual-usuario.md)
+- [Manual de administrador](docs/manual-administrador.md)
+
 ## Requisitos
 
 - Node.js 18+
