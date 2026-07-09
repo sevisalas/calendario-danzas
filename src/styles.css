@@ -341,6 +341,17 @@ h3 {
 .checkbox-field {
   display: grid;
   gap: 7px;
+}
+
+.access-card label {
+  font-weight: 500;
+}
+
+.access-card input {
+  font-weight: 400;
+}
+
+.checkbox-field {
   font-weight: 700;
 }
 
